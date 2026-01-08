@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <title>Hitung Gaji Karyawan</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 700px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 12px 16px;
+            vertical-align: top;
+        }
+        th {
+            text-align: center;
+            font-weight: bold;
+        }
+        td input[type="text"], td input[type="number"] {
+            width: 150px;
+            padding: 2px 6px;
+            margin-left: 6px;
+        }
+        h2 {
+            margin-bottom: 16px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 4px 10px;
+            cursor: pointer;
+        }
+        /* Output text style to match image */
+        #outputGaji {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.8em;
+        }
+        #outputGaji b {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>INPUTAN</th>
+                <th>OUTPUT</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <h2>Hitung Gaji Karyawan</h2>
+                    <label for="gajiPokok">Gaji Pokok (Rp):</label>
+                    <input type="number" id="gajiPokok" value="5000000" />
+                    <br /><br />
+                    <label for="jamLembur">Jumlah Jam Lembur:</label>
+                    <input type="number" id="jamLembur" value="20" />
+                    <br /><br />
+                    <button onclick="hitungGaji()">Hitung Gaji</button>
+                </td>
+                <td>
+                    <div id="outputGaji"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function formatRupiah(value) {
+            // Mengubah nomor menjadi format Rp dengan tanda titik sebagai pemisah ribuan
+            return 'Rp ' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        function hitungGaji() {
+            const gajiPokok = parseInt(document.getElementById('gajiPokok').value) || 0;
+            const jamLembur = parseInt(document.getElementById('jamLembur').value) || 0;
+
+            const totalGajiLembur = jamLembur * 20000;
+            const gajiKotor = gajiPokok + totalGajiLembur;
+
+            let pajak = 0;
+            if (gajiKotor < 5000000) {
+                pajak = 0.05 * gajiKotor;
+            } else if (gajiKotor <= 10000000) {
+                pajak = 0.10 * gajiKotor;
+            } else {
+                pajak = 0.15 * gajiKotor;
+            }
+
+            const gajiBersih = gajiKotor - pajak;
+
+            // Memformat hasil agar tampil sesuai gambar
+            const html = `
+                <b>Gaji Pokok:</b> ${formatRupiah(gajiPokok)}<br /><br />
+                Total Gaji Lembur: ${formatRupiah(totalGajiLembur)}<br /><br />
+                <b>Gaji Kotor:</b> ${formatRupiah(gajiKotor)}<br /><br />
+                Pajak: ${formatRupiah(Math.round(pajak))}<br /><br />
+                <b>Gaji Bersih:</b> ${formatRupiah(Math.round(gajiBersih))}
+            `;
+
+            document.getElementById('outputGaji').innerHTML = html;
+        }
+
+        // Menampilkan hasil default saat halaman dibuka
+        window.onload = hitungGaji;
+    </script>
+</body>
+</html>
